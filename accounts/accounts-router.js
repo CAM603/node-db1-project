@@ -15,17 +15,17 @@ router.get('/', (req, res) => {
         })
 })
 
-router.get('/:id', (req, res) => {
-    db('accounts')
-        .where({ id: req.params.id })
-        .then(account => {
-            res.status(200).json(account[0])
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({ error: 'Failed to retrieve account' })
-        })
-})
+// router.get('/:id', (req, res) => {
+//     db('accounts')
+//         .where({ id: req.params.id })
+//         .then(account => {
+//             res.status(200).json(account[0])
+//         })
+//         .catch(err => {
+//             console.log(err)
+//             res.status(500).json({ error: 'Failed to retrieve account' })
+//         })
+// })
 // WITH .first()
 router.get('/:id', (req, res) => {
     db('accounts')
@@ -54,6 +54,19 @@ router.post('/', (req, res) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({ error: 'Failed adding account'})
+        })
+})
+
+router.put('/:id', (req, res) => {
+    db('accounts')
+        .where({id: req.params.id}) // DO NOT FORGET OR GET FIRED :P
+        .update(req.body)
+        .then(count => {
+            res.status(200).json(count)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ error: 'Failed to update account' })
         })
 })
 
