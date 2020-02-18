@@ -4,15 +4,35 @@ const db = require('../data/dbConfig');
 
 const router = express.Router();
 
+function validateId(req, res, next) {
+    if(!isNaN(req.params.id))
+    return next();
+    next(new Error('Invalid ID'))
+}
+
 router.get('/', (req, res) => {
-    db('accounts')
+    console.log(req.query)
+    if(req.query.name) {
+        db('accounts').where({name: req.query.name})
         .then(accounts => {
+            
             res.status(200).json(accounts)
         })
         .catch(err => {
             console.log(err)
             res.status(500).json({ error: 'Failed to get list of accounts' })
         })
+    } else {
+        db('accounts')
+            .then(accounts => {
+                
+                res.status(200).json(accounts)
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({ error: 'Failed to get list of accounts' })
+            })
+    }
 })
 
 // router.get('/:id', (req, res) => {
